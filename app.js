@@ -7,7 +7,7 @@ const helmet = require('helmet');
 const app = express();
 const { PORT = 3000 } = process.env;
 
-const routercard = require('./routes/cards');
+const routerarticle = require('./routes/article');
 const routerusers = require('./routes/users');
 
 const { login, createUser } = require('./controllers/users.js');
@@ -22,6 +22,7 @@ mongoose.connect('mongodb://localhost:27017/news-explorer-api', {
   useFindAndModify: false,
   useUnifiedTopology: true,
 });
+
 app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -41,7 +42,7 @@ app.post('/signup', celebrate({
   }),
 }), createUser);
 app.use(auth);
-app.use(router);
+app.use(routerarticle);
 app.use(routerusers);
 app.use('/', () => {
   throw new NotFoundError('Запрашиваемый ресурс не найден!');

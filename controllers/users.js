@@ -8,7 +8,7 @@ const ConflictError = require('../errors/conflict-err');
 
 const { JWT_SECRET = 'dev-key' } = process.env;
 
-module.exports.getUserId = (req, res, next) => {
+module.exports.getUserMe = (req, res, next) => {
   User.findById(req.params.Id)
     .orFail(new NotFoundError('Такого пользователя нет в базе'))
     .then((user) => res.send({ data: user }))

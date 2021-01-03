@@ -1,12 +1,12 @@
-const Card = require('../models/card');
+const Article = require('../models/article');
 const NotFoundError = require('../errors/not-found-err');
 const BadRequestError = require('../errors/bad-request-err');
 const ForbiddenError = require('../errors/forbidden-err');
 
-module.exports.getCard = (req, res, next) => {
-  Card.find({})
+module.exports.getArticle = (req, res, next) => {
+  Article.find({})
     .populate('owner')
-    .then((card) => res.send({ data: card }))
+    .then((article) => res.send({ data: article }))
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BadRequestError('Переданы некорректные данные'));
@@ -15,17 +15,17 @@ module.exports.getCard = (req, res, next) => {
       }
     });
 };
-module.exports.deleteCard = (req, res, next) => {
-  const cardId = req.params._id;
-  Card.findOne(cardId)
+module.exports.deleteArticle = (req, res, next) => {
+  const articleId = req.params._id;
+  Article.findOne(articleId)
     .orFail(new NotFoundError('Такой карточки нет в базе'))
-    .then((card) => {
-      if (card.owner._id.toString() !== req.user._id) {
+    .then((article) => {
+      if (article.owner._id.toString() !== req.user._id) {
         throw new ForbiddenError('Недостаточно прав!');
       } else {
-        Card.findOneAndRemove(cardId)
-          .then((cards) => {
-            res.send({ data: cards });
+        Article.findOneAndRemove(articleId)
+          .then((articles) => {
+            res.send({ data: articles });
           });
       }
     })
@@ -37,10 +37,24 @@ module.exports.deleteCard = (req, res, next) => {
       }
     });
 };
-module.exports.createCard = (req, res, next) => {
-  const { name, link } = req.body;
-  Card.create({ name, link, owner: req.user._id })
-    .then((card) => res.send({ data: card }))
+module.exports.createArticle = (req, res, next) => {
+  const {
+    keyword, title,
+    text, date,
+    source, image,
+    link,
+  } = req.body;
+  Article.create({
+    keyword,
+    title,
+    text,
+    date,
+    source,
+    image,
+    link,
+    owner: req.user._id,
+  })
+    .then((article) => res.send({ data: article }))
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BadRequestError('Переданы некорректные данные'));
