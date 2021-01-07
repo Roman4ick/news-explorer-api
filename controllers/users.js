@@ -1,7 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const NotFoundError = require('../errors/not-found-err');
 const AuthIdenError = require('../errors/auth-iden-err');
 const BadRequestError = require('../errors/bad-request-err');
 const ConflictError = require('../errors/conflict-err');
@@ -9,8 +8,8 @@ const ConflictError = require('../errors/conflict-err');
 const { JWT_SECRET = 'dev-key' } = process.env;
 
 module.exports.getUserMe = (req, res, next) => {
-  User.findById(req.params.Id)
-    .orFail(new NotFoundError('Такого пользователя нет в базе'))
+  const userId = req.params._id;
+  User.find(userId)
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'CastError') {
