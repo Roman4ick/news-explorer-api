@@ -3,9 +3,12 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
+const cors = require('cors');
 
 const app = express();
 const { PORT = 3000 } = process.env;
+
+app.use(cors());
 
 const routerarticle = require('./routes/article');
 const routerusers = require('./routes/users');
