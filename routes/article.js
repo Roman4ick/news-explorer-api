@@ -3,7 +3,11 @@ Joi.objectId = require('joi-objectid')(Joi);
 const routerarticle = require('express').Router();
 const { getArticle, deleteArticle, createArticle } = require('../controllers/article');
 
-routerarticle.get('/articles', getArticle);
+routerarticle.get('/articles', celebrate({
+  headers: Joi.object().keys({
+    authorization: Joi.string().required(),
+  }).unknown(true),
+}), getArticle);                                                                  
 routerarticle.delete('/articles/:Id', celebrate({
   params: Joi.object().keys({
     Id: Joi.objectId().hex().length(24),
