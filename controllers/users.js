@@ -8,9 +8,8 @@ const ConflictError = require('../errors/conflict-err');
 const { JWT_SECRET = 'dev-key' } = process.env;
 
 module.exports.getUserMe = (req, res, next) => {
-  const userId = req.params._id;
-  User.find(userId)
-    .then((user) => res.send({ data: user }))
+  User.findById(req.user._id)
+    .then((user) => res.send({ email: user.email, name: user.name }))
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BadRequestError('Переданы некорректные данные'));
