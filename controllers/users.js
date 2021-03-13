@@ -43,7 +43,7 @@ module.exports.login = (req, res, next) => {
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' });
-      res.send({ token });
+      res.send({ token, _id: user._id });
       res.cookie('jwt', token, { maxAge: 3600000, httpOnly: true, sameSite: true });
     })
     .catch(() => next(new AuthIdenError('Неправильные почта или пароль')))
