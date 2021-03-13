@@ -23,7 +23,7 @@ module.exports.deleteArticle = (req, res, next) => {
       if (article.owner.toString() !== req.user._id) {
         throw new ForbiddenError('Недостаточно прав!');
       } 
-         return Article.deleteOne(article)
+        Article.findByIdAndRemove(article)
           .then((articles) => {
             res.send({ message: 'Карточка удалена!' });
           });
