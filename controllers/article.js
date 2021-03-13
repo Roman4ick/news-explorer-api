@@ -15,11 +15,10 @@ module.exports.getArticle = (req, res, next) => {
     });
 };
 module.exports.deleteArticle = (req, res, next) => {
-  const articleId = req.params._id;
-  Article.findOne(articleId)
+  Article.findById(req.params.id).select('+owner')
     .orFail(new NotFoundError('Такой карточки нет в базе'))
     .then((article) => {
-      if (article.owner._id.toString() !== req.user._id) {
+      if (JSON.stringify(article.owner) !== JSON.stringify(req.user._id)) {
         throw new ForbiddenError('Недостаточно прав!');
       } else {
         Article.findOneAndRemove(articleId)
