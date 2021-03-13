@@ -24,7 +24,7 @@ module.exports.deleteArticle = (req, res, next) => {
         throw new ForbiddenError('Недостаточно прав!');
       } 
         Article.findByIdAndRemove(article)
-          .then((articles) => {
+          .then((article) => {
             res.send({ message: 'Карточка удалена!' });
           });
     })
