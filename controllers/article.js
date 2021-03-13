@@ -22,12 +22,11 @@ module.exports.deleteArticle = (req, res, next) => {
     .then((article) => {
       if (article.owner.toString() !== req.user._id) {
         throw new ForbiddenError('Недостаточно прав!');
-      } else {
-        Article.deleteOne(article)
+      } 
+         return Article.deleteOne(article)
           .then((articles) => {
             res.send({ message: 'Карточка удалена!' });
           });
-      }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
