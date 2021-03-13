@@ -5,7 +5,8 @@ const ForbiddenError = require('../errors/forbidden-err');
 
 module.exports.getArticle = (req, res, next) => {
   Article.find({ owner: req.user._id })
-    .then((article) => res.send({ article }))
+    .populate('owner')
+    .then((article) => res.send(article))
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BadRequestError('Переданы некорректные данные'));
@@ -15,15 +16,16 @@ module.exports.getArticle = (req, res, next) => {
     });
 };
 module.exports.deleteArticle = (req, res, next) => {
-  Article.findById(req.params.id).select('+owner')
+  Article.findById(req.params.id)
+    .select('+owner')
     .orFail(new NotFoundError('Такой карточки нет в базе'))
     .then((article) => {
-      if (JSON.stringify(article.owner) !== JSON.stringify(req.user._id)) {
+      if (article.owner.toString() !== req.user._id) {
         throw new ForbiddenError('Недостаточно прав!');
       } else {
-        Article.findOneAndRemove(article)
+        Article.deleteOne(article)
           .then((articles) => {
-            res.send({ data: articles });
+            res.send({ message: 'Карточка удалена!' });
           });
       }
     })
