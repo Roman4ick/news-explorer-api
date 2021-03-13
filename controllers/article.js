@@ -6,7 +6,7 @@ const ForbiddenError = require('../errors/forbidden-err');
 module.exports.getArticle = (req, res, next) => {
   Article.find({ owner: req.user._id })
     .populate('owner')
-    .then((article) => res.send(article))
+    .then((article) => res.send({ data: article }))
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BadRequestError('Переданы некорректные данные'));
