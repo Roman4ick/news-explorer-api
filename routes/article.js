@@ -10,7 +10,7 @@ routerarticle.get('/articles', celebrate({
 }), getArticle);                                                                  
 routerarticle.delete('/articles/:Id', celebrate({
   params: Joi.object().keys({
-    id: Joi.string().alphanum(),
+     Id: Joi.objectId().hex().length(24),
   }),
 }), deleteArticle);
 routerarticle.post('/articles', celebrate({
