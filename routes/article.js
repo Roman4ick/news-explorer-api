@@ -10,11 +10,8 @@ routerarticle.get('/articles', celebrate({
 }), getArticle);                                                                  
 routerarticle.delete('/articles/:Id', celebrate({
   params: Joi.object().keys({
-    Id: Joi.objectId().hex().length(24),
-  }).unknown(true),
-  headers: Joi.object().keys({
-    authorization: Joi.string().required(),
-  }).unknown(true),
+    id: Joi.string().alphanum(),
+  }),
 }), deleteArticle);
 routerarticle.post('/articles', celebrate({
   body: Joi.object().keys({
