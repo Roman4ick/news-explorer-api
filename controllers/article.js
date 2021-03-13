@@ -21,7 +21,7 @@ module.exports.deleteArticle = (req, res, next) => {
       if (JSON.stringify(article.owner) !== JSON.stringify(req.user._id)) {
         throw new ForbiddenError('Недостаточно прав!');
       } else {
-        Article.findOneAndRemove(articleId)
+        Article.findOneAndRemove(article)
           .then((articles) => {
             res.send({ data: articles });
           });
