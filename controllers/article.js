@@ -18,7 +18,7 @@ module.exports.getArticle = (req, res, next) => {
 module.exports.deleteArticle = (req, res, next) => {
   Article.findById(req.params.id)
     .select('+owner')
-    .orFail(new NotFoundError('Такой карточки нет в базе'))
+    .orFail(() => new NotFoundError('Такой карточки нет в базе'))
     .then((article) => {
       if (article.owner.toString() !== req.user._id) {
         throw new ForbiddenError('Недостаточно прав!');
