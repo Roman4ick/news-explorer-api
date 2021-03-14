@@ -5,7 +5,7 @@ const { getUserMe } = require('../controllers/users');
 
 routerusers.get('/users/me', celebrate({
   params: Joi.object().keys({
-    Id: Joi.objectId().hex().length(24),
+    id: Joi.objectId().hex().length(24),
   }),
   headers: Joi.object().keys({
     authorization: Joi.string().required(),
