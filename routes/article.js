@@ -8,9 +8,9 @@ routerarticle.get('/articles', celebrate({
     authorization: Joi.string().required(),
   }).unknown(true),
 }), getArticle);                                                                  
-routerarticle.delete('/articles/:Id', celebrate({
+routerarticle.delete('/articles/:id', celebrate({
   params: Joi.object().keys({
-     Id: Joi.objectId().hex().length(24),
+     id: Joi.objectId().hex().length(24),
   }),
 }), deleteArticle);
 routerarticle.post('/articles', celebrate({
